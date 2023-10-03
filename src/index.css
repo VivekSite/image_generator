@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Mooli&family=Poppins:wght@100&family=Roboto+Mono&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Robot Mono', 'Mooli', sans-serif;
+}
+
+#layout{
+  margin: 4rem 15rem 0 15rem;
+}
+
+
+#searchArea{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectionBox{
+  cursor: pointer;
+  color: #4e4e4e;
+  margin: 1rem ;
+  padding: 0.5rem 1rem ;
+  font-size: medium;
+  border-radius: .5rem;
+  border: none;
+  outline: none;
+}
+
+#searchBar{
+  min-width: 300px;
+}
+
+button[name='clear']{
+  background-color: #fb9494;
+  color: black;
+  transition: .2s ease;
+}
+
+button[name='clear']:hover{
+  background-color: #3b3b3b;
+  color: white;
+}
+
+button[name='generate']{
+  background-color: #96D4D4;
+  transition: .2s ease;
+}
+
+button[name='generate']:hover{
+  color: #46dddd;
+  background-color: #8a8a8a;
+}
+
+#image-container{
+  display: grid;
+  grid: auto/auto auto auto;
+  justify-content: center;
+  align-items: center;
+}
+
+#image-container img{
+  width: 20rem;
+  border-radius: 1rem;
+  margin: 1rem;
+}
+
+@media (max-width:1541px){
+  #layout{
+    margin: 2rem 5rem 0 5rem;
+  }
+
+  .selectionBox{
+    margin: 0.3rem;
+  }
+}
+
+@media (max-width:1100px){
+  #layout{
+    margin: 2rem 0;
+  }
+
+  #image-container{
+    grid: auto/auto auto ;
+  }
+  
+  #searchArea{
+    flex-direction: column;
+  }
+}
+
+@media (max-width:800px){
+  #image-container{
+    grid: auto/auto;
+  }
+  
+}
+
+@media (max-width:450px){
+  .selectionBox{
+    margin: 0.2rem;
+    padding: 0.4rem 0.5rem;
+  }
+}
