@@ -12,11 +12,6 @@ function App() {
 
   const handle_image_generation = () => {
     const imageContainer = document.getElementById("image-container");
-    // const p = document.querySelectorAll('#image-container img')
-    // console.log(p.length)
-    // p.forEach(() => {
-    //   imageContainer.remove(imageContainer.firstChild)
-    // })
 
     fetch(
       `https://api.pexels.com/v1/search?query=${query}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
@@ -28,6 +23,7 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         const images = data.photos;
 
         images.forEach((image) => {
