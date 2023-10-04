@@ -1,99 +1,107 @@
 import { useState } from "react";
 import "./index.css";
 import Layout from "./Layout/Layout";
+import axios from "axios";
 
 function App() {
-  const [query, setQuery] = useState();
-  const [orientation, setOrientation] = useState();
-  const [size, setSize] = useState();
+  const [query, setQuery] = useState("");
+  const [orientation, setOrientation] = useState("landscape");
+  const [size, setSize] = useState("medium");
   const [per_page, setPer_page] = useState(10);
+  const [imageUrls, setImageUrls] = useState([]);
+  let [page, setPage] = useState(1);
 
   const api_key = "mAb59WInPy7nbV7ziIGPDkyPKK0j4G2ZOL2toiRiyjrbqvf1koaV66y6";
+  let data = null;
 
-  const handle_image_generation = () => {
-    const imageContainer = document.getElementById("image-container");
+  const handleRemove = () => {
+    setImageUrls([]);
+  };
 
-    fetch(
-      `https://api.pexels.com/v1/search?query=${query}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
-      {
-        headers: {
-          Authorization: api_key,
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        const images = data.photos;
-
-        images.forEach((image) => {
-          const imgElement = document.createElement("img");
-          imgElement.src = image.src.medium;
-          imageContainer.appendChild(imgElement);
-        });
-      })
+  const handle_image_generation = async () => {
+    setImageUrls([]);
+    await axios
+      .get(
+        `https://api.pexels.com/v1/search?query=${query}&page=${page}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
+        {
+          headers: {
+            Authorization: api_key,
+          },
+        }
+      )
+      .then((res) => (data = res.data))
       .catch((error) => {
         console.log("Error fetching images " + error);
       });
+
+    if (data) {
+      setImageUrls(data.photos.map((obj) => obj.src.original));
+    }
   };
+
+  const getNextPage = () => {
+    setPage(page+=1);
+    handle_image_generation();
+  }
+
+  const getPrevPage = () => {
+    if(page > 1){
+      setPage(page-=1);
+      handle_image_generation();
+    }
+  }
+
+  const sizeArr = ["tiny", "small", "medium", "large", "large2x", "original"];
+  const orientationArr = ["Portrait", "Landscape", "Square"];
 
   return (
     <Layout>
       <div id="searchArea">
-      {/****************** Searchbar ******************************/}
+        {/*–––––––––––––––––––––––– Searchbar ––––––––––––––––––––––––*/}
         <input
-          className="selectionBox"
+          className="styleBox"
           id="searchBar"
-          style={{backgroundColor:'#FFF4A3', cursor:'text'}}
+          style={{ backgroundColor: "#FFF4A3", cursor: "text" }}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {setQuery(e.target.value); setPage(1)}}
           placeholder="Search To Get Images"
         />
         <div className="btnSelection">
-          {/****************** Orientation Selection ************************/}
+          {/*–––––––––––––––––––––––– Orientation Selection ––––––––––––––––––––––––*/}
           <select
-            style={{backgroundColor:'#E7E9EB'}}
-            className="selectionBox"
+            style={{ backgroundColor: "#E7E9EB" }}
+            className="styleBox"
             name="orientation"
             value={orientation}
             onChange={(e) => setOrientation(e.target.value)}
           >
-            <option value="">
-              Orientation
-            </option>
-            <option value="square">Square</option>
-            <option value="landscape">Landscape</option>
-            <option value="portrait">Portrait</option>
+            {orientationArr.map((option) => (
+              <option value={option.toLowerCase()}>{option}</option>
+            ))}
           </select>
 
-          {/****************** Size Selection ************************/}
+          {/*–––––––––––––––––––––––– Size Selection ––––––––––––––––––––––––*/}
           <select
-            style={{backgroundColor:'#FFC0C7'}}
-            className="selectionBox"
+            style={{ backgroundColor: "#FFC0C7" }}
+            className="styleBox"
             name="size"
             value={size}
             onChange={(e) => setSize(e.target.value)}
           >
-            <option value="" selected>
-              Size
-            </option>
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
+            {sizeArr.map((option) => (
+              <option value={option.toLowerCase()}>{option}</option>
+            ))}
           </select>
 
-          {/****************** Per_Page Selection ************************/}
+          {/*–––––––––––––––––––––––– quantity Selection ––––––––––––––––––––––––*/}
           <select
-            style={{backgroundColor:'#FFC0C7'}}
-            className="selectionBox"
+            style={{ backgroundColor: "#FFC0C7" }}
+            className="styleBox"
             name="per_Page"
             value={per_page}
             onChange={(e) => setPer_page(e.target.value)}
           >
-            <option value="" selected>
-              10 Img
-            </option>
             <option value={20}>20 Img</option>
             <option value={30}>30 Img</option>
             <option value={50}>50 Img</option>
@@ -101,18 +109,50 @@ function App() {
         </div>
 
         <div id="btnContainer">
-          {/****************** Generate Button ************************/}
-          <button name="generate" className="selectionBox" onClick={handle_image_generation}>
+          {/*–––––––––––––––––––––––– Generate Button ––––––––––––––––––––––––*/}
+          <button
+            name="generate"
+            className="styleBox"
+            onClick={handle_image_generation}
+          >
             Generate
           </button>
 
-          {/****************** Clear Button ************************/}
-          <button name="clear" className="selectionBox">
+          {/*–––––––––––––––––––––––– Clear Button ––––––––––––––––––––––––*/}
+          <button name="clear" className="styleBox" onClick={handleRemove}>
             Clear
           </button>
         </div>
       </div>
-      <div id="image-container"></div>
+
+      {/*–––––––––––––––––––––––– Generated Images ––––––––––––––––––––––––––*/}
+      <div id="image-container">
+        {
+          imageUrls.map((imageUrl, index) => (
+          <img src={imageUrl} alt={`Error Loading..`} key={index} />
+        ))}
+
+      </div>
+        {/*–––––––––– conditional rendering of Prev & Next buttons –––––––––*/}
+        {imageUrls.length !== 0 ? (
+          <div id='pageBtns'>
+            <button name="prevPage" className="styleBox" onClick={getPrevPage}>
+              &larr; prevPage
+            </button>
+            <button name="nextPage" className="styleBox" onClick={getNextPage}>
+              nextPage &rarr;
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
+      {imageUrls.length !== 0 ? (
+          <>
+            <center><p><strong>Note:</strong>&nbsp;Image loading depends on your internet speed & quality of Image selected</p></center>
+          </>
+        ) : (
+          <></>
+        )}
     </Layout>
   );
 }
