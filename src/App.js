@@ -19,6 +19,7 @@ function App() {
   };
 
   const handle_image_generation = async () => {
+    document.getElementById('noImageFound').style.display = 'none'
     if(!query){ alert("No Query Is Given\nSearch To Get Images"); return }
     document.getElementById('wait').style.display = 'block'
     setImageUrls([]);
@@ -36,10 +37,14 @@ function App() {
         console.log("Error fetching images " + error);
       });
       
-      if (data) {
-        setImageUrls(data.photos.map((obj) => obj.src.original));
-      }
-      document.getElementById('wait').style.display = 'none'
+    if (data) {
+      setImageUrls(data.photos.map((obj) => obj.src.original));
+    }
+    document.getElementById('wait').style.display = 'none'
+
+    if(data.photos.length===0){
+      document.getElementById('noImageFound').style.display = 'block'
+    }
   };
 
   const getNextPage = () => {
@@ -136,6 +141,11 @@ function App() {
 
       <div id="wait">
         <center><p>Please Wait...</p></center>
+      </div>
+      <div id="noImageFound">
+        <center>
+          <p>No Images Found! <br />Search For Another Word</p>
+        </center>
       </div>
       <div id="image-container">
         {
