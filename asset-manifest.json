@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/VivekSite/image_generator.git/static/css/main.a50344ba.css",
+    "main.js": "/VivekSite/image_generator.git/static/js/main.7cad3bbd.js",
+    "index.html": "/VivekSite/image_generator.git/index.html",
+    "main.a50344ba.css.map": "/VivekSite/image_generator.git/static/css/main.a50344ba.css.map",
+    "main.7cad3bbd.js.map": "/VivekSite/image_generator.git/static/js/main.7cad3bbd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a50344ba.css",
+    "static/js/main.7cad3bbd.js"
+  ]
+}
