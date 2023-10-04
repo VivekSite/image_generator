@@ -15,6 +15,7 @@ function App() {
   let data = null;
 
   const handleRemove = () => {
+    document.getElementById('noImageFound').style.display = 'none'
     setImageUrls([]);
   };
 
