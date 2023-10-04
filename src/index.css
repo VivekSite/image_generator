@@ -95,6 +95,11 @@ button:active{
   box-shadow: 2px 2px 5px #696969;
 }
 
+#wait{
+  display: none;
+  margin-top: 2rem;
+}
+
 /*––––––––––––––– Media 1541px ––––––––––––––*/
 @media (max-width:1541px){
   #layout{ margin: 2rem 5rem 0 5rem; }

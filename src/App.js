@@ -19,24 +19,27 @@ function App() {
   };
 
   const handle_image_generation = async () => {
+    if(!query){ alert("No Query Is Given\nSearch To Get Images"); return }
+    document.getElementById('wait').style.display = 'block'
     setImageUrls([]);
     await axios
-      .get(
-        `https://api.pexels.com/v1/search?query=${query}&page=${page}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
-        {
-          headers: {
-            Authorization: api_key,
-          },
-        }
+    .get(
+      `https://api.pexels.com/v1/search?query=${query}&page=${page}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
+      {
+        headers: {
+          Authorization: api_key,
+        },
+      }
       )
       .then((res) => (data = res.data))
       .catch((error) => {
         console.log("Error fetching images " + error);
       });
-
-    if (data) {
-      setImageUrls(data.photos.map((obj) => obj.src.original));
-    }
+      
+      if (data) {
+        setImageUrls(data.photos.map((obj) => obj.src.original));
+      }
+      document.getElementById('wait').style.display = 'none'
   };
 
   const getNextPage = () => {
@@ -127,7 +130,13 @@ function App() {
         </div>
       </div>
 
+      <center><p style={{color:'gray'}}><strong style={{color:'red'}}>Note:</strong>&nbsp;Image loading depends on your internet speed & quality of Image selected</p></center>
+
       {/*–––––––––––––––––––––––– Generated Images ––––––––––––––––––––––––––*/}
+
+      <div id="wait">
+        <center><p>Please Wait...</p></center>
+      </div>
       <div id="image-container">
         {
           imageUrls.map((imageUrl, index) => (
@@ -135,26 +144,19 @@ function App() {
         ))}
 
       </div>
-        {/*–––––––––– conditional rendering of Prev & Next buttons –––––––––*/}
-        {imageUrls.length !== 0 ? (
-          <div id='pageBtns'>
-            <button name="prevPage" className="styleBox" onClick={getPrevPage}>
-              &larr; prevPage
-            </button>
-            <button name="nextPage" className="styleBox" onClick={getNextPage}>
-              nextPage &rarr;
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
+      {/*–––––––––– conditional rendering of Prev & Next buttons –––––––––*/}
       {imageUrls.length !== 0 ? (
-          <>
-            <center><p><strong>Note:</strong>&nbsp;Image loading depends on your internet speed & quality of Image selected</p></center>
-          </>
-        ) : (
-          <></>
-        )}
+        <div id='pageBtns'>
+          <button name="prevPage" className="styleBox" onClick={getPrevPage}>
+            &larr; prevPage
+          </button>
+          <button name="nextPage" className="styleBox" onClick={getNextPage}>
+            nextPage &rarr;
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
     </Layout>
   );
 }
