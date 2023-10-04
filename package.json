@@ -1,6 +1,6 @@
 {
   "name": "image_generator",
-  "homepage": "https://viveksite.github.io/image_generator/",
+  "homepage": "https://github.com/VivekSite/image_generator.git",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
