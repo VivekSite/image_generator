@@ -11,7 +11,6 @@ function App() {
   const [imageUrls, setImageUrls] = useState([]);
   let [page, setPage] = useState(1);
 
-  const api_key = "mAb59WInPy7nbV7ziIGPDkyPKK0j4G2ZOL2toiRiyjrbqvf1koaV66y6";
   let data = null;
 
   const handleRemove = () => {
@@ -29,7 +28,7 @@ function App() {
       `https://api.pexels.com/v1/search?query=${query}&page=${page}&per_page=${per_page}&size=${size}&orientation=${orientation}`,
       {
         headers: {
-          Authorization: api_key,
+          Authorization: process.env.API_KEY,
         },
       }
       )
